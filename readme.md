@@ -1,3 +1,94 @@
-# src-carousel
+# A simle web, h5 carousel
 
 A simple web, h5 carousel.
+
+# usage
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Carousel Component</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="index.css">
+    <style>
+        .sc-box{
+            margin-top: 50px
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sc-box">
+        <div class="sc">
+            <div class="sc-inner">
+                <div class="sc-item">
+                    <img class="sc-image" src="./images/1.png" alt="">
+                    <div class="sc-caption">
+                        <h5>first slide</h5>
+                    </div>
+                </div>
+                <div class="sc-item">
+                    <img class="sc-image" src="./images/2.png" alt="">
+                    <div class="sc-caption">
+                        <h5>second slide</h5>
+                    </div>
+                </div>
+
+                <div class="sc-item">
+                    <img class="sc-image" src="./images/3.png" alt="">
+                    <div class="sc-caption">
+                        <h5>third slide</h5>
+                    </div>
+                </div>
+                <div class="sc-item">
+                    <img class="sc-image" src="./images/4.png" alt="">
+                    <div class="sc-caption">
+                        <h5>fourth slide</h5>
+                    </div>
+                </div>
+                <div class="sc-item">
+                    <img class="sc-image" src="./images/5.png" alt="">
+                    <div class="sc-caption">
+                        <h5>fifth slide</h5>
+                    </div>
+                </div>
+            </div>
+            <span class="sc-control-prev">
+                <span id="left" class="sc-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </span>
+            <span class="sc-control-next" role="button" data-slide="next">
+                <span id="right" class="sc-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </span>
+            <ol class="sc-indicators">
+                <!-- <li data-target="#carouselExampleCaptions" data-slide-to="0"></li>
+                <li data-target="#carouselExampleCaptions" data-slide-to="1"></li>
+                <li class="active" data-target="#carouselExampleCaptions" data-slide-to="2"></li> -->
+            </ol>
+        </div>
+    </div>
+    <script src="index.js">
+        
+    </script>
+    <script>
+        carousel_fun(document.getElementsByClassName('sc')[0]);
+    </script>
+</body>
+
+</html>
+```
+
+# options
+
+No options support now.
+
+# liscense
+
+[MIT Liscense](LICENSE)
