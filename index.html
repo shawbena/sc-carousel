@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Carousel Component</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        .sc-box {
+            width: 80%;
+            height: 100px;
+            margin: 0 auto;
+            overflow: hidden;
+            color: #fff;
+        }
+
+        .sc {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+            /* padding-bottom: 20px; */
+            /* overflow-x: scroll;
+            overflow-y: hidden; */
+            /* box-sizing: content-box; */
+        }
+
+        .sc-image {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .sc::after {
+            content: '';
+            display: table;
+            clear: both;
+        }
+
+        .sc-inner {
+            min-width: 100%;
+            display: flex;
+            flex-wrap: nowrap;
+            height: 100%;
+        }
+
+        .sc-item {
+            /* width: 33.33333%; */
+            height: 100%;
+            position: relative;
+        }
+
+        .sc-caption {
+            position: absolute;
+            right: 15%;
+            bottom: 20px;
+            left: 15%;
+            text-align: center;
+        }
+
+        .sc-control-prev,
+        .sc-control-next {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-align: center;
+            align-items: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+            width: 15%;
+            text-align: center;
+            opacity: .5;
+            transition: 0.5s ease;
+            transition-property: transform, opacity;
+            opacity: 0;
+        }
+
+        .sc-control-prev {
+            left: 0;
+            transform: translateX(-10px);
+        }
+
+        .sc-control-next {
+            right: 0;
+            transform: translateX(10px);
+        }
+
+        .sc:hover .sc-control-prev,
+        .sc:hover .sc-control-next {
+            opacity: 1;
+            transform: translateX(0px)
+        }
+
+        .sc-control-next-icon,
+        .sc-control-prev-icon {
+            cursor: pointer;
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background: transparent no-repeat center center;
+            background-size: 100% 100%;
+        }
+
+        .sc-control-prev-icon {
+            background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E");
+        }
+
+        .sc-control-next-icon {
+            background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E");
+        }
+
+        .sc-indicators {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 15;
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-pack: center;
+            justify-content: center;
+            padding-left: 0;
+            /* margin-right: 15%; */
+            /* margin-left: 15%; */
+            list-style: none;
+            margin-bottom: 12px;
+        }
+
+        .sc-indicators li {
+            position: relative;
+            -ms-flex: 0 1 auto;
+            flex: 0 1 auto;
+            width: 30px;
+            height: 3px;
+            margin-right: 3px;
+            margin-left: 3px;
+            text-indent: -999px;
+            cursor: pointer;
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+        .sc-indicators>.active{
+            background-color: currentColor;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sc-box">
+        <div class="sc">
+            <div class="sc-inner">
+                <div class="sc-item">
+                    <img class="sc-image" src="./images/1.png" alt="">
+                    <div class="sc-caption">
+                        <h5>first slide</h5>
+                    </div>
+                </div>
+                <div class="sc-item">
+                    <img class="sc-image" src="./images/2.png" alt="">
+                    <div class="sc-caption">
+                        <h5>second slide</h5>
+                    </div>
+                </div>
+
+                <div class="sc-item">
+                    <img class="sc-image" src="./images/3.png" alt="">
+                    <div class="sc-caption">
+                        <h5>third slide</h5>
+                    </div>
+                </div>
+                <div class="sc-item">
+                    <img class="sc-image" src="./images/4.png" alt="">
+                    <div class="sc-caption">
+                        <h5>fourth slide</h5>
+                    </div>
+                </div>
+                <div class="sc-item">
+                    <img class="sc-image" src="./images/5.png" alt="">
+                    <div class="sc-caption">
+                        <h5>fifth slide</h5>
+                    </div>
+                </div>
+            </div>
+            <span class="sc-control-prev">
+                <span id="left" class="sc-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </span>
+            <span class="sc-control-next" role="button" data-slide="next">
+                <span id="right" class="sc-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </span>
+            <ol class="sc-indicators">
+                <!-- <li data-target="#carouselExampleCaptions" data-slide-to="0"></li>
+                <li data-target="#carouselExampleCaptions" data-slide-to="1"></li>
+                <li class="active" data-target="#carouselExampleCaptions" data-slide-to="2"></li> -->
+            </ol>
+        </div>
+    </div>
+    <script>
+        var carousel = document.getElementsByClassName('sc')[0]
+        var carouselInner = document.getElementsByClassName('sc-inner')[0]
+        var carouselItems = carouselInner.getElementsByClassName('sc-item')
+        var carouselIndicotor = carousel.getElementsByClassName('sc-indicators')[0]
+        var slides = carouselItems.length;
+        carouselIndicotor.appendChild(generateNIndictors(slides));
+
+        carouselInner.style.transition = 'all ease 0.5s';
+        carouselInner.style.transform = 'translateX(0px)';
+        carouselInner.style.width = slides * 100 + '%';
+        var width = carousel.scrollWidth;
+        for (var i = 0; i < slides; i++) {
+            carouselItems[i].style.width = carousel.clientWidth + 'px';
+        }
+        var left = 0;
+        var leftBreakPoints = []
+        var rightBreakPoints = [];
+        for (var i = 1; i <= slides; i++) {
+            leftBreakPoints.push({
+                start: (i - 1) / slides * width,
+                min: ((i - 1) / slides + (1 / (slides * 3))) * width,
+                max: (i / slides) * width,
+                end: (i /slides) * width
+            })
+        }
+        for (var i = slides; i >= 1; i--) {
+            rightBreakPoints.push({
+                min: (i - 1) / slides * width,
+                max: (i / slides - (1 / (slides * 3))) * width,
+                end: i / slides * width
+            });
+        }
+
+        var direction; /// 'left' 'right'
+        var timeoutId;
+        var timeoutId = setTimeout(function startSlide() {
+            toNext();
+        }, 5000)
+        carouselInner.addEventListener('transitionend', function(e){
+            setIndicator();
+        });
+        var leftBtn = document.getElementById('left')
+        var rightBtn = document.getElementById('right');
+        leftBtn.addEventListener('click', function () {
+            clearTimeout(timeoutId)
+            left -= width / slides;
+            if (left < -width * ((slides - 1) / slides)) {
+                left = 0;
+            }
+            carouselInner.style.transform = 'translateX(' + left + 'px)';
+            timeoutId = setTimeout(toNext, 5000)
+        })
+        rightBtn.addEventListener('click', function () {
+            clearTimeout(timeoutId)
+            left += width / slides;
+            if (left > 0) {
+                left = -width * ((slides - 1) / slides);
+            }
+            carouselInner.style.transform = 'translateX(' + left + 'px)';
+            timeoutId = setTimeout(toPrev, 5000)
+        })
+
+        function toNext() {
+            left -= width / slides;
+            if (left < -width * ((slides - 1) / slides)) {
+                left += width / slides;
+                toPrev();
+                return;
+            }
+            carouselInner.style.transform = 'translateX(' + left + 'px)';
+            timeoutId = setTimeout(toNext, 5000)
+        }
+
+        function toPrev() {
+            left += width / slides;
+            if (left > 0) {
+                left = 0;
+                toNext();
+                return;
+            }
+            carouselInner.style.transform = 'translateX(' + left + 'px)';
+            timeoutId = setTimeout(toPrev, 5000)
+        }
+        var increment = 0;
+        var clientX;
+        var lastTranslate;
+        carouselInner.addEventListener('touchstart', function (e) {
+            clearTimeout(timeoutId)
+            var regResult = /-[0-9]+/.exec(carouselInner.style.transform);
+            if (regResult && regResult[0]) {
+                lastTranslate = parseInt(regResult[0])
+            } else {
+                lastTranslate = 0;
+            }
+            var touch = e.changedTouches[0]
+            clientX = touch.clientX;
+            carouselInner.style.transition = '';
+        });
+        carouselInner.addEventListener('touchmove', function (e) {
+            var regResult = /-?[0-9]+/.exec(carouselInner.style.transform);
+            var translate;
+            if (regResult && regResult[0]) {
+                translate = parseInt(regResult[0])
+            } else {
+                translate = 0;
+            }
+            var touch = e.changedTouches[0]
+            translate += touch.clientX - clientX;
+            clientX = touch.clientX;
+            if (translate >= 0) {
+                translate = 0;
+            } else if (translate < -width * (slides - 1) / slides) {
+                translate = -(slides - 1) / slides * width;
+            }
+            carouselInner.style.transform = 'translate(' + translate + 'px)'
+        })
+        carouselInner.addEventListener('touchend', function (e) {
+            carouselInner.style.transition = 'transform 0.5s ease';
+            var regResult = /-[0-9]+/.exec(carouselInner.style.transform);
+            var translate;
+            var direction;
+            if (regResult && regResult[0]) {
+                translate = parseInt(regResult[0])
+            }
+            if (isNaN(translate)) {
+                return;
+            }
+            if (translate - lastTranslate <= 0) {
+                direction = 'left'
+            } else {
+                direction = 'right'
+            }
+            translate = -translate;
+            // 向左移动
+            if (direction == 'left') {
+                for (var i = 0; i < leftBreakPoints.length; i++) {
+                    if (translate >= leftBreakPoints[i].start && translate <= leftBreakPoints[i].min) {
+                        translate = leftBreakPoints[i].start;
+                        break;
+                    }
+                    if (translate >= leftBreakPoints[i].min && translate < leftBreakPoints[i].max) {
+                        // left = max;
+                        // toNext();
+                        translate = leftBreakPoints[i].max;
+                        break;
+                    }
+                }
+            } else {
+                for (var i = 0; i < rightBreakPoints.length; i++) {
+                    // 向右移动
+                    if (translate <= rightBreakPoints[i].end && translate >= rightBreakPoints[i].max) {
+                        translate = rightBreakPoints[i].start;
+                        break;
+                    }
+                    if (translate >= rightBreakPoints[i].min && translate < rightBreakPoints[i].max) {
+                        // left = max;
+                        // toNext();
+                        translate = rightBreakPoints[i].min;
+                        break;
+                    }
+                }
+            }
+            carouselInner.style.transform = 'translate(' + -translate + 'px)';
+            setIndicator();
+            if (direction == 'left') {
+                timeoutId = setTimeout(toNext, 5000);
+            } else {
+                timeoutId = setTimeout(toPrev, 5000);
+            }
+        })
+        carouselInner.addEventListener('touchcancel', function (e) {
+            // console.log('touchcancel', e)
+        })
+        carouselInner.addEventListener('touchenter', function (e) {
+            // console.log('touchenter', e)
+        })
+        carouselInner.addEventListener('touchleave', function (e) {
+            // console.log('touchleave', e)
+        })
+        
+        /*
+         * 设置激活的指示器。
+         * n: 指示器索引，从0开始。
+        */
+        function setIndicator(){
+             var translateX = -getTranslateX(carouselInner);
+            translateX += 10; // 偏移
+            var n = 0;
+            for(; n < leftBreakPoints.length; n++){
+                if(translateX > leftBreakPoints[n].start && translateX < leftBreakPoints[n].end){
+                    break;
+                }
+            }
+            var indicators = carouselIndicotor.getElementsByTagName('li');
+            for(var i = 0; i < indicators.length; i++ ){
+                indicators[i].classList.remove('active')
+            }
+            indicators[n].classList.add('active');
+        }
+        /*
+         * @return number || null
+        */
+        function getTranslateX(node){
+            if(!(node instanceof HTMLElement)){
+                throw TypeError('node type incorrect, expect HTMLElement, but get ' + node);
+            }
+            var regResult = /-?[0-9]+/.exec(node.style.transform);
+            return regResult ? regResult[0] : null;
+        }
+        /*
+         * 生成指示器。
+        */
+        function generateNIndictors(n, active){
+            active = active || 0;
+            var indicators = document.createDocumentFragment();
+            for(var i = 0; i < n; i++){
+                var indicator = document.createElement('li');
+                if(active == i){
+                    indicator.className = 'active';
+                }
+                // <li data-target="#carouselExampleCaptions" data-slide-to="1"></li>
+                indicator.setAttribute('data-slide-to', i);
+                indicators.appendChild(indicator)
+            }
+            return indicators;
+        }
+    </script>
+</body>
+
+</html>

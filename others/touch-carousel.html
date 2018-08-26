@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Interactive Carousel demos</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        .carousel-box {
+            width: 300px;
+            height: 100px;
+            margin: 0 auto;
+            overflow: hidden;
+            color: #fff;
+        }
+
+        .carousel {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            /* padding-bottom: 20px; */
+            /* overflow-x: scroll;
+            overflow-y: hidden; */
+            /* box-sizing: content-box; */
+        }
+
+        .carousel-image {
+            position: absolute;
+            width: 100%;
+            z-index: -1;
+        }
+
+        .carousel::after {
+            content: '';
+            display: table;
+            clear: both;
+        }
+
+        .carousel-inner {
+            width: 300%;
+            display: flex;
+            flex-wrap: nowrap;
+            height: 100%;
+        }
+
+        .carousel-item {
+            width: 33.33333%;
+            height: 100%;
+            position: relative;
+        }
+
+        .carousel-caption {
+            position: absolute;
+            right: 15%;
+            bottom: 20px;
+            left: 15%;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="carousel-box">
+        <div class="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item">
+                    <img class="carousel-image" src="./images/1.png" alt="">
+                    <div class="carousel-caption">
+                        <h5>first slide</h5>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img class="carousel-image" src="./images/2.png" alt="">
+                    <div class="carousel-caption">
+                        <h5>second slide</h5>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img class="carousel-image" src="./images/3.png" alt="">
+                    <div class="carousel-caption">
+                        <h5>third slide</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button id="left">left</button>
+    <button id="right">right</button>
+    <script>
+        var carousel = document.getElementsByClassName('carousel')[0]
+        var carouselInner = document.getElementsByClassName('carousel-inner')[0]
+        carouselInner.style.transition = 'all ease 0.5s';
+        carouselInner.style.transform = 'translateX(0px)'
+        var width = carousel.scrollWidth;
+        var slides = 3;
+        var left = 0;
+        var leftBreakPoints = []
+        var rightBreakPoints = [];
+        for (var i = 1; i <= slides; i++) {
+            leftBreakPoints.push({
+                start: (i - 1) / slides * width,
+                min: ((i - 1) / slides + (1 / (slides * 3))) * width,
+                max: (i / slides) * width
+            })
+        }
+        for (var i = slides; i >= 1; i--) {
+            rightBreakPoints.push({
+                min: (i - 1) / slides * width,
+                max: (i / slides - (1 / (slides * 3))) * width,
+                end: i / slides * width
+            });
+        }
+
+        var direction; /// 'left' 'right'
+        var timeoutId;
+        var timeoutId = setTimeout(function startSlide() {
+            toNext();
+        }, 5000)
+
+        var leftBtn = document.getElementById('left')
+        var rightBtn = document.getElementById('right');
+        leftBtn.addEventListener('click', function () {
+            direction = 'left'
+            clearTimeout(timeoutId)
+            left -= width / 3;
+            if (left < -width / 3 * 2) {
+                left = 0;
+            }
+            carouselInner.style.transform = 'translateX(' + left + 'px)';
+            timeoutId = setTimeout(toNext, 5000)
+        })
+        rightBtn.addEventListener('click', function () {
+            clearTimeout(timeoutId)
+            left += width / 3;
+            if (left > 0) {
+                left = -width / 3 * 2;
+            }
+            carouselInner.style.transform = 'translateX(' + left + 'px)';
+            timeoutId = setTimeout(toPrev, 5000)
+        })
+
+        function toNext() {
+            left -= width / 3;
+            if (left < -width / 3 * 2) {
+                left += width / 3;
+                toPrev();
+                return;
+            }
+            carouselInner.style.transform = 'translateX(' + left + 'px)';
+            timeoutId = setTimeout(toNext, 5000)
+        }
+
+        function toPrev() {
+            left += width / 3;
+            if (left > 0) {
+                left = 0;
+                toNext();
+                return;
+            }
+            carouselInner.style.transform = 'translateX(' + left + 'px)';
+            timeoutId = setTimeout(toPrev, 5000)
+        }
+        var increment = 0;
+        var clientX;
+        var lastTranslate;
+        carouselInner.addEventListener('touchstart', function (e) {
+            clearTimeout(timeoutId)
+            var regResult = /-[0-9]+/.exec(carouselInner.style.transform);
+            if (regResult && regResult[0]) {
+                lastTranslate = parseInt(regResult[0])
+            } else {
+                lastTranslate = 0;
+            }
+            var touch = e.changedTouches[0]
+            clientX = touch.clientX;
+            carouselInner.style.transition = '';
+        });
+        carouselInner.addEventListener('touchmove', function (e) {
+            var regResult = /-?[0-9]+/.exec(carouselInner.style.transform);
+            var translate;
+            if (regResult && regResult[0]) {
+                translate = parseInt(regResult[0])
+            } else {
+                translate = 0;
+            }
+            var touch = e.changedTouches[0]
+            translate += touch.clientX - clientX;
+            clientX = touch.clientX;
+            if (translate >= 0) {
+                translate = 0;
+            } else if (translate < -width * (slides - 1) / slides) {
+                translate = -(slides - 1) / slides * width;
+            }
+            carouselInner.style.transform = 'translate(' + translate + 'px)'
+        })
+        carouselInner.addEventListener('touchend', function (e) {
+            carouselInner.style.transition = 'transform 0.5s ease';
+            var regResult = /-[0-9]+/.exec(carouselInner.style.transform);
+            var translate;
+            var direction;
+            if (regResult && regResult[0]) {
+                translate = parseInt(regResult[0])
+            }
+            if (isNaN(translate)) {
+                return;
+            }
+            if (translate - lastTranslate <= 0) {
+                direction = 'left'
+            } else {
+                direction = 'right'
+            }
+            translate = -translate;
+            // 向左移动
+            if (direction == 'left') {
+                for (var i = 0; i < leftBreakPoints.length; i++) {
+                    if (translate >= leftBreakPoints[i].start && translate <= leftBreakPoints[i].min) {
+                        translate = leftBreakPoints[i].start;
+                        break;
+                    }
+                    if (translate >= leftBreakPoints[i].min && translate < leftBreakPoints[i].max) {
+                        // left = max;
+                        // toNext();
+                        translate = leftBreakPoints[i].max;
+                        break;
+                    }
+                }
+            } else {
+                for (var i = 0; i < rightBreakPoints.length; i++) {
+                    // 向右移动
+                    if (translate <= rightBreakPoints[i].end && translate >= rightBreakPoints[i].max) {
+                        translate = rightBreakPoints[i].start;
+                        break;
+                    }
+                    if (translate >= rightBreakPoints[i].min && translate < rightBreakPoints[i].max) {
+                        // left = max;
+                        // toNext();
+                        translate = rightBreakPoints[i].min;
+                        break;
+                    }
+                }
+            }
+            carouselInner.style.transform = 'translate(' + -translate + 'px)';
+            console.log('touchend...', translate)
+            if (direction == 'left') {
+                timeoutId = setTimeout(toNext, 5000);
+            } else {
+                timeoutId = setTimeout(toPrev, 5000);
+            }
+        })
+        carouselInner.addEventListener('touchcancel', function (e) {
+            // console.log('touchcancel', e)
+        })
+        carouselInner.addEventListener('touchenter', function (e) {
+            // console.log('touchenter', e)
+        })
+        carouselInner.addEventListener('touchleave', function (e) {
+            // console.log('touchleave', e)
+        })
+    </script>
+</body>
+
+</html>

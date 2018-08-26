@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Auto Carousel demos</title>
+    <style>
+        *{
+            box-sizing: border-box;
+        }
+        .carousel{
+            width: 300px;
+            border: 1px solid #ccc;
+            height: 100px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+        .carousel::after{
+            content: '';
+            display: table;
+            clear: both;
+        }
+        .carousel-inner{
+            width: 300%;
+            display: flex;
+            flex-wrap: nowrap;
+            height: 100%;
+        }
+        .carousel-item{
+            width: 33.33333%;
+            height: 100;
+            border: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <div class="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item">
+                one
+            </div>
+            <div class="carousel-item">
+                two
+            </div>
+            <div class="carousel-item">
+                three
+            </div>
+        </div>
+    </div>
+    <!-- <button id="left">left</button> <button id="right">right</button> -->
+    <script>
+        var carouselInner = document.getElementsByClassName('carousel-inner')[0]
+        carouselInner.style.transition = 'transform ease 1s';
+        carouselInner.style.transform = 'translateX(0px)'
+        var width = carouselInner.offsetWidth;
+        var slides = 3;
+        var left = 0;
+        var timeoutId = setTimeout(function startSlide(){
+            toNext();
+        },0)
+
+        function toNext(){
+            left -= width / 3;
+            if(left < -width / 3 * 2){
+                left += width / 3;
+                toPrev();
+                return;
+            }
+            carouselInner.style.transform  = 'translateX(' + left + 'px)';
+            timeoutId = setTimeout(toNext, 5000)
+        }
+        function toPrev(){
+            left += width / 3;
+            if(left > 0){
+                left = 0;
+                toNext();
+                return;
+            }
+            carouselInner.style.transform  = 'translateX(' + left + 'px)';
+            timeoutId = setTimeout(toPrev, 5000)
+        }
+    </script>
+</body>
+</html>
